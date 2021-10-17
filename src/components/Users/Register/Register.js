@@ -35,8 +35,9 @@ const Register = () => {
   });
   //console.log(formik);
   //select state from store
-  const storeData = useSelector(store => store);
+  const storeData = useSelector(store => store?.users);
   const {loading,appErr, serverErr, registered} = storeData;
+  console.log(storeData);
   //redirect
   if(registered) {
     return <Redirect to = "/profile" />

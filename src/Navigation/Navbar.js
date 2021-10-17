@@ -9,7 +9,7 @@ import AdminNavbar from './Admin/AdminNavbar';
 
 const Navbar = () => {
   //get user from store
-  const state = useSelector(state => state);
+  const state = useSelector(state => state?.users);
   console.log(state)
   const {userAuth} = state;
   const isAdmin = userAuth?.isAdmin;
