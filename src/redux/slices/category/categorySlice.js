@@ -53,6 +53,9 @@ export const fetchCategoriesAction = createAsyncThunk('category/fetch', async (c
   }
 });
 
+
+
+
 //slices 
 const categorySlices = createSlice({name: 'category',
 initialState: {},
@@ -88,6 +91,8 @@ extraReducers : (builder) => {
     state.appErr = action?.payload?.message;
     state.serverErr = action?.error?.message;
   });
+
+  
 }
 });
 
