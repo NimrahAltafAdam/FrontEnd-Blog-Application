@@ -5,12 +5,14 @@ import Register from "./components/Users/Register/Register";
 import Navbar from "./Navigation/Navbar";
 import AddNewCategory from "./components/Categories/AddNewCategory";
 import CategoryList from "./components/Categories/CategoryList";
+import UpdateCategory from "./components/Categories/UpdateCategory";
 
 function App() {
   return (
     <BrowserRouter>
      <Navbar />
       <Switch>
+      <Route exact path="/update-category/:id" component={UpdateCategory} />
         <Route exact path="/add-category" component={AddNewCategory} />
         <Route exact path="/category-list" component={CategoryList} />
         <Route exact path="/" component={HomePage} />
