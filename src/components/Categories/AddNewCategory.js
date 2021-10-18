@@ -3,6 +3,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {createCategoryAction} from "../../redux/slices/category/categorySlice";
 import {useFormik} from "formik";
 import * as Yup from "yup";
+import {Redirect} from "react-router-dom";
 
 //Form Schema
 const formSchema = Yup.object({
@@ -26,8 +27,8 @@ const AddNewCategory = () => {
   //get data from user
   const store = useSelector(state => state?.category);
   console.log(store);
-  const {category, loading, serverErr, appErr} = store
-  //if(userAuth) return <Redirect to = "/profile" />
+  const {category, loading, serverErr, appErr, isCreated} = store
+  if(isCreated) return <Redirect to = "/category-list" />
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">

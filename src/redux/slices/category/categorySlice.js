@@ -1,6 +1,13 @@
-import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
+import {createAsyncThunk, createSlice, createAction} from "@reduxjs/toolkit";
 import axios from "axios";
 import baseURL from "../../../utils/baseURL";
+
+//we need to create a custom action that does not require any http method so that once the user is redirected to the category-list after updating a category, the updatedCategory is removed from the store
+//Action to redirect
+const resetEditAction = createAction('category/reset-edit');
+const resetDeleteAction = createAction('category/reset-delete')
+const resetCategoryAction = createAction('category/reset-category')
+
 
 
 //action
@@ -22,6 +29,8 @@ export const createCategoryAction = createAsyncThunk('category/create', async (c
       title: category?.title
     }, config
     );
+    //dispatch action
+    dispatch(resetCategoryAction());
     return data
   } catch (error) {
     if(!error?.response) {
@@ -65,10 +74,12 @@ export const updateCategoriesAction = createAsyncThunk('category/update', async 
       Authorization: `Bearer ${userAuth?.token}`
     }
   }
-  //console.log(userAuth?.token);
+  
   //http call
   try {
     const {data} = await axios.put(`${baseURL}/api/category/${category?.id}`,{title: category?.title} ,config);
+    //dispatch action to reset the updated data
+    dispatch(resetEditAction());
     return data
   } catch (error) {
     if(!error?.response) {
@@ -92,6 +103,7 @@ export const deleteCategoriesAction = createAsyncThunk('category/delete', async 
   //http call
   try {
     const {data} = await axios.delete(`${baseURL}/api/category/${id}`, config);
+    dispatch(resetDeleteAction())
     return data
   } catch (error) {
     if(!error?.response) {
@@ -134,8 +146,13 @@ extraReducers : (builder) => {
   builder.addCase(createCategoryAction.pending, (state, action) => {
     state.loading = true;
   });
+  //dispatch action to redirect
+  builder.addCase(resetCategoryAction, (state,action) => {
+    state.isCreated = true;
+  })
   builder.addCase(createCategoryAction.fulfilled, (state, action) => {
     state.category = action?.payload;
+    state.isCreated = false;
     state.loading = false;
     state.appErr = undefined;
     state.serverErr = undefined; 
@@ -167,9 +184,14 @@ extraReducers : (builder) => {
   builder.addCase(updateCategoriesAction.pending, (state, action) => {
     state.loading = true;
   });
+  //Dispatch action-Since this is a custom action we do not need to handle pending or fulfilled condition as it is not making any request to the backend
+  builder.addCase(resetEditAction, (state,action) => {
+    state.isEdited = true;
+  })
   builder.addCase(updateCategoriesAction.fulfilled, (state, action) => {
     state.updatedCategory = action?.payload;
     state.loading = false;
+    state.isEdited = false;
     state.appErr = undefined;
     state.serverErr = undefined; 
   });
@@ -183,9 +205,14 @@ extraReducers : (builder) => {
   builder.addCase(deleteCategoriesAction.pending, (state, action) => {
     state.loading = true;
   });
+  //dispatch for redirect
+  builder.addCase(resetDeleteAction, (state,action) => {
+    state.isDeleted = true;
+  })
   builder.addCase(deleteCategoriesAction.fulfilled, (state, action) => {
     state.deletedCategory = action?.payload;
     state.loading = false;
+    state.isDeleted = false;
     state.appErr = undefined;
     state.serverErr = undefined; 
   });

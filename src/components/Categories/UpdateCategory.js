@@ -4,6 +4,7 @@ import {fetchCategoryAction, updateCategoriesAction, deleteCategoriesAction} fro
 import {useFormik} from "formik";
 import * as Yup from "yup";
 import { useEffect } from "react";
+import {Redirect} from "react-router-dom";
 
 //Form Schema
 const formSchema = Yup.object({
@@ -19,11 +20,11 @@ const UpdateCategory = ({match : {params :{id}}}) => {
   }, [dispatch])
 
   //get data from store
-  const store = useSelector(state => state?.category);
-  const {category, loading, serverErr, appErr} = store
-  //console.log(category);
+  const state = useSelector(state => state?.category);
+  const {category, loading, serverErr, appErr, isEdited, isDeleted} = state;
+  console.log(isEdited);
 
-  //formil
+  //formik
   const formik = useFormik({
     enableReinitialize : true,// this step is important for formik to render the title otherwise formik will render the form before the title is rendered from the store
     initialValues: {
@@ -37,6 +38,8 @@ const UpdateCategory = ({match : {params :{id}}}) => {
     validationSchema : formSchema,
   });
 
+  //redirect
+  if(isEdited || isDeleted) return <Redirect to = "/category-list" />;
   
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
