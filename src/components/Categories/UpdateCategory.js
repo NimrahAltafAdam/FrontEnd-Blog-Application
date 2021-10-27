@@ -11,7 +11,11 @@ const formSchema = Yup.object({
   title: Yup.string().required("Title is required"),
 })
 
-const UpdateCategory = ({match : {params :{id}}}) => {
+const UpdateCategory = ({
+  computedMatch: {
+    params: { id },
+  },
+}) => {
   const dispatch = useDispatch();
 
   //fect single category -put fetch actions in useEffect 
