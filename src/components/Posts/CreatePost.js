@@ -4,12 +4,14 @@ import {useDispatch, useSelector} from "react-redux";
 
 import {Redirect} from "react-router-dom";
 import {createPostAction} from "../../redux/slices/posts/postSlice";
+import CategoryDropDown from "../Categories/CategoryDropDown";
 
 //Form Schema
 const formSchema = Yup.object({
   title: Yup.string().required("Title is required"),
   description: Yup.string().required("Description is required"),
-})
+  category: Yup.object().required("Category is required"),
+});
 
 
 export default function CreatePost() {
@@ -20,15 +22,23 @@ export default function CreatePost() {
     initialValues: {
       title: '',
       description: '',
+      category: "",
     },
     onSubmit : values => {
+
+      const data = {
+        category: values?.category?.label,
+        title: values?.title,
+        description : values?.description
+      }
       //dispatch the action
-      dispatch(createPostAction(values));
+      //console.log(category)
+      dispatch(createPostAction(data));
     },
     validationSchema : formSchema,
   });
   const store = useSelector(state => state?.post);
-  console.log(store);
+ 
   //destructure data
   const { loading, serverErr, appErr,} = store
   return (
@@ -75,7 +85,13 @@ export default function CreatePost() {
                 {formik.touched.title && formik.errors.title}
                 </div>
               </div>
-              Category input goes here
+              <CategoryDropDown  
+              value = {formik.values.category?.label} 
+              onChange = {formik.setFieldValue} 
+              onBlur = {formik.setFieldTouched} 
+              error = {formik.errors.category}
+              touched = {formik.touched.category}
+              />
               <div>
                 <label
                   htmlFor="password"
