@@ -1,18 +1,36 @@
 import {useFormik} from "formik";
 import * as Yup from "yup";
 import {useDispatch, useSelector} from "react-redux";
-
+import styled from "styled-components";
 import {Redirect} from "react-router-dom";
 import {createPostAction} from "../../redux/slices/posts/postSlice";
 import CategoryDropDown from "../Categories/CategoryDropDown";
+import Dropzone  from "react-dropzone";
 
 //Form Schema
 const formSchema = Yup.object({
   title: Yup.string().required("Title is required"),
   description: Yup.string().required("Description is required"),
   category: Yup.object().required("Category is required"),
+  image: Yup.string().required("Image is required"),
 });
 
+
+//CSS For Dropzone
+const Container = styled.div`
+flex: 1;
+display: flex;
+flex-direction: column;
+align-time: center;
+padding: 20px;
+border-width: 2px;
+border-radius: 2px;
+border-style: dashed;
+background-color: #fafafa;
+color: #bdbdbd;
+border-color: 'red';
+transition: border 0.24s ease-in-out;
+`;
 
 export default function CreatePost() {
 
@@ -23,13 +41,15 @@ export default function CreatePost() {
       title: '',
       description: '',
       category: "",
+      image: "",
     },
     onSubmit : values => {
-
+      console.log(values);
       const data = {
         category: values?.category?.label,
         title: values?.title,
-        description : values?.description
+        description : values?.description,
+        image: values?.image
       }
       //dispatch the action
       //console.log(category)
@@ -38,16 +58,17 @@ export default function CreatePost() {
     validationSchema : formSchema,
   });
   const store = useSelector(state => state?.post);
- 
   //destructure data
-  const { loading, serverErr, appErr,} = store
+  const { isCreated, loading, serverErr, appErr,} = store;
+
+  //redirect
+  if(isCreated) return <Redirect to = "/posts" />
   return (
     <>
       <div className="min-h-screen bg-gray-900 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-300">
             Create Post
-            {serverErr || appErr ? <h2 className = "text-red-500">{serverErr}-{appErr}</h2>: null}
           </h2>
 
           <p className="mt-2 text-center text-sm text-gray-600">
@@ -56,6 +77,8 @@ export default function CreatePost() {
               profanity
             </p>
           </p>
+
+          {serverErr || appErr ? <h2 className = " text-red-500  ">{serverErr}-{appErr}</h2>: null}
         </div>
         <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
           <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
@@ -85,6 +108,12 @@ export default function CreatePost() {
                 {formik.touched.title && formik.errors.title}
                 </div>
               </div>
+              <label
+                  htmlFor="password"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Select a Category
+                </label>
               <CategoryDropDown  
               value = {formik.values.category?.label} 
               onChange = {formik.setFieldValue} 
@@ -111,6 +140,40 @@ export default function CreatePost() {
                 ></textarea>
                 {/* Err msg */}
                 <div className="text-red-500">{formik.touched.description && formik.errors.description}</div>
+                {/*Image Component*/}
+                <label
+                  htmlFor="password"
+                  className="block text-sm font-medium mt-3 mb-1 text-gray-700"
+                >
+                  Select an Image to Upload
+                </label>
+                <Container className = "container bg-gray-600">
+                <Dropzone
+                onBlur = {formik.handleBlur('image')}
+                accept = "/jpeg, image/png"
+                onDrop = {acceptedFiles => {
+                  formik.setFieldValue("image", acceptedFiles[0]);
+                }} 
+                
+                 >
+                {({getRootProps, getInputProps}) => (
+                    <div className = "container">
+                      <div
+                      {...getRootProps({
+                        className: "dropzone",
+                        onDrop: event => event.stopPropagation(),
+                      })}
+                      >
+                      <input {...getInputProps()} />
+                      <p className = "text-gray-300 text-lg cursor-pointer hover:text-gray-500">
+                        Click here to select image
+                      </p>
+                      </div> 
+                    </div>
+                  )
+                }
+                </Dropzone>
+                </Container>
               </div>
               <div>
                 {/* Submit btn */}
