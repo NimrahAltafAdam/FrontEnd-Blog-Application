@@ -149,7 +149,7 @@ import LoadingComponent from "../../utils/LoadingComponent";
          </Link>
          <p class="text-gray-300">{post?.description}</p>
          {/* Read more */}
-         <Link  /* to = {`/posts/${post?._id}`} */ > className="text-indigo-500 hover:underline">
+         <Link   to = {`/posts/${post?._id}`}  className="text-indigo-500 hover:underline">
            Read More..
          </Link>
        {/* User Avatar */}

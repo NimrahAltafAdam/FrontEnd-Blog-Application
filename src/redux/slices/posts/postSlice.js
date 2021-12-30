@@ -102,7 +102,27 @@ export const toggleAddDisLikesToPost = createAsyncThunk('post/dislike',
     }
   });
 
-  
+  //PostDetails
+  export const fetchPostDetailsAction = createAsyncThunk('post/detail', 
+  async (id, {rejectWithValue, getState, dispatch}) => {
+    //Get User Token
+    const user = getState()?.users;
+    const {userAuth} = user;
+    const config = {
+    headers : {
+      Authorization: `Bearer ${userAuth?.token}`
+    }};
+
+    try {
+      const {data} = await axios.get(`${baseURL}/api/posts/${id}`, config);
+      return data
+    } catch (error) {
+      if(!error?.response) {
+        throw error;
+      }
+      return rejectWithValue(error?.response?.data);
+    }
+  });
 
 
 //slices
@@ -176,6 +196,23 @@ extraReducers: (builder) => {
     state.serverErr = undefined; 
   });
   builder.addCase(toggleAddDisLikesToPost.rejected, (state, action) => {
+    state.loading = false;
+    state.appErr = action?.payload?.message;
+    state.serverErr = action?.error?.message;
+  });
+
+  //PostDetails
+  builder.addCase(fetchPostDetailsAction.pending, (state, action) => {
+    state.loading = true;
+  });
+
+  builder.addCase(fetchPostDetailsAction.fulfilled, (state, action) => {
+    state.postDetails = action?.payload
+    state.loading = false;
+    state.appErr = undefined;
+    state.serverErr = undefined; 
+  });
+  builder.addCase(fetchPostDetailsAction.rejected, (state, action) => {
     state.loading = false;
     state.appErr = action?.payload?.message;
     state.serverErr = action?.error?.message;
