@@ -25,7 +25,8 @@ console.log(category)
          <LoadingComponent />
          </>) : 
             appErr || serverErr ? (
-              <h2 className = "text-center text-3xl text-red-600">{serverErr}-{appErr}</h2> ) : 
+              <h2 className = "text-center text-3xl text-red-600">{serverErr}-{appErr}</h2> 
+              ) : 
               categoryList?.length <=0 ? (
                 <h2>No Category Found</h2> ) :  (
         <div className="flex flex-col">

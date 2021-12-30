@@ -7,7 +7,7 @@ import {createPostAction} from "../../redux/slices/posts/postSlice";
 import CategoryDropDown from "../Categories/CategoryDropDown";
 import Dropzone  from "react-dropzone";
 
-//Form Schema
+//Form schema
 const formSchema = Yup.object({
   title: Yup.string().required("Title is required"),
   description: Yup.string().required("Description is required"),
@@ -36,26 +36,26 @@ export default function CreatePost() {
 
   const dispatch = useDispatch();
 
+  //formik
   const formik = useFormik({
     initialValues: {
-      title: '',
-      description: '',
+      title: "",
+      description: "",
       category: "",
       image: "",
     },
-    onSubmit : values => {
+    onSubmit: values => {
+      //dispath the action
       console.log(values);
       const data = {
         category: values?.category?.label,
         title: values?.title,
-        description : values?.description,
-        image: values?.image
-      }
-      //dispatch the action
-      //console.log(category)
+        description: values?.description,
+        image: values?.image,
+      };
       dispatch(createPostAction(data));
     },
-    validationSchema : formSchema,
+    validationSchema: formSchema,
   });
   const store = useSelector(state => state?.post);
   //destructure data
@@ -73,7 +73,7 @@ export default function CreatePost() {
 
           <p className="mt-2 text-center text-sm text-gray-600">
             <p className="font-medium text-green-600 hover:text-indigo-500">
-              Share your ideas to the word. Your post must be free from
+              Share your ideas to the world. Your post must be free from
               profanity
             </p>
           </p>
@@ -108,18 +108,19 @@ export default function CreatePost() {
                 {formik.touched.title && formik.errors.title}
                 </div>
               </div>
-              <label
-                  htmlFor="password"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Select a Category
-                </label>
-              <CategoryDropDown  
-              value = {formik.values.category?.label} 
-              onChange = {formik.setFieldValue} 
-              onBlur = {formik.setFieldTouched} 
-              error = {formik.errors.category}
-              touched = {formik.touched.category}
+             {/* Category input goes here */}
+             <label
+                htmlFor="password"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Select Category
+              </label>
+              <CategoryDropDown
+                value={formik.values.category?.label}
+                onChange={formik.setFieldValue}
+                onBlur={formik.setFieldTouched}
+                error={formik.errors.category}
+                touched={formik.touched.category}
               />
               <div>
                 <label

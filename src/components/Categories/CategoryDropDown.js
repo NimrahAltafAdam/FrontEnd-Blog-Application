@@ -16,6 +16,7 @@ const CategoryDropDown = (props) => {
 
   //select categories
   const category = useSelector(state => state?.category);
+  //console.log("CATEGORY",category);
   const {categoryList, loading, appErr, serverErr} = category;
 
   const allCategories = categoryList?.map(category => {
@@ -24,16 +25,17 @@ const CategoryDropDown = (props) => {
       value: category?._id,
     };
   });
+  //console.log(allCategories);
   //Now we need a method we will use to make sure that the option that is selected is returned to the form in some manner
 
   //handleChange 
   const handleChange = (value) => {
-    props.onChange('category', value);
+    props.onChange("category", value);
   };
 
   //handleBlur
   const handleBlur = () => {
-    props.onBlur('category', true);
+    props.onBlur("category", true);
   };
   return (
       <div style = {{margin: '1rem 0'}}>

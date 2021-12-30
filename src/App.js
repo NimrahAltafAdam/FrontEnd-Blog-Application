@@ -6,16 +6,21 @@ import Navbar from "./Navigation/Navbar";
 import AddNewCategory from "./components/Categories/AddNewCategory";
 import CategoryList from "./components/Categories/CategoryList";
 import UpdateCategory from "./components/Categories/UpdateCategory";
-import { PrivateProtecteRoute } from "./Navigation/ProtectedRoutes/PrivateProtecteRoute";
+import { PrivateProtectedRoute } from "./Navigation/ProtectedRoutes/PrivateProtectedRoute";
 import  AdminRoute  from "./Navigation/ProtectedRoutes/AdminRoute";
 import CreatePost from "./components/Posts/CreatePost";
+import PostsList from "./components/Posts/PostsList";
+import PostDetails from "./components/Posts/PostDetails";
+
 function App() {
   return (
     <BrowserRouter>
      <Navbar />
       <Switch>
       <AdminRoute exact path="/update-category/:id" component={UpdateCategory} />
-      <PrivateProtecteRoute exact path="/create-post" component={CreatePost} />
+      <PrivateProtectedRoute exact path="/create-post" component={CreatePost} />
+      <Route exact path="/posts" component={PostsList} />
+      <Route exact path="/posts/:id" component={PostDetails} />
         <AdminRoute exact path="/add-category" component={AddNewCategory} />
         <AdminRoute exact path="/category-list" component={CategoryList} />
         <Route exact path="/" component={HomePage} />
