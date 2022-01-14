@@ -26,6 +26,18 @@ const PostDetails = ({
     //select post details from store
     const post = useSelector(state => state?.post)
     const {postDetails, loading, appErr, serverErr, isDeleted} = post;
+    //console.log("ID1 ",postDetails?.user?._id);
+
+    //Get login user
+    const user = useSelector(state => state.users);
+    
+    const {
+      userAuth: { _id },
+    } = user;
+    //console.log("ID2",_id);
+
+    const isCreatedBy = postDetails?.user?._id === _id;  
+    console.log(isCreatedBy);
 
     //redirect
   if(isDeleted) return <Redirect to = "/posts" />;
@@ -71,8 +83,9 @@ const PostDetails = ({
             <div class="max-w-xl mx-auto">
               <p class="mb-6 text-left  text-xl text-gray-200">
                 {postDetails?.description}
-                {/* Show delete and update btn if created user */}
-                <p class="flex">
+                {/* Show delete and update btn if it was created by the user */}
+                {isCreatedBy ? 
+                  <p class="flex">
                   <Link to = {`/update-post/${postDetails?._id}`} class="p-3">
                     <PencilAltIcon class="h-8 mt-3 text-yellow-300" />
                   </Link>
@@ -81,7 +94,8 @@ const PostDetails = ({
                    class="ml-3">
                     <TrashIcon class="h-8 mt-3 text-red-600" />
                   </button>
-                </p>
+                </p> : null
+                }
               </p>
             </div>
           </div>
