@@ -11,6 +11,8 @@ import  AdminRoute  from "./Navigation/ProtectedRoutes/AdminRoute";
 import CreatePost from "./components/Posts/CreatePost";
 import PostsList from "./components/Posts/PostsList";
 import PostDetails from "./components/Posts/PostDetails";
+import UpdatePost from "./components/Posts/UpdatePost";
+
 
 function App() {
   return (
@@ -18,7 +20,9 @@ function App() {
      <Navbar />
       <Switch>
       <AdminRoute exact path="/update-category/:id" component={UpdateCategory} />
+      <PrivateProtectedRoute exact path="/update-post/:id" component={UpdatePost} />
       <PrivateProtectedRoute exact path="/create-post" component={CreatePost} />
+      
       <Route exact path="/posts" component={PostsList} />
       <Route exact path="/posts/:id" component={PostDetails} />
         <AdminRoute exact path="/add-category" component={AddNewCategory} />

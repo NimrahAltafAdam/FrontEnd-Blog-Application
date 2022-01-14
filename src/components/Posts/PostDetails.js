@@ -1,11 +1,12 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { PencilAltIcon, TrashIcon } from "@heroicons/react/solid";
-import { fetchPostDetailsAction } from "../../redux/slices/posts/postSlice";
+import { deletePostAction, fetchPostDetailsAction } from "../../redux/slices/posts/postSlice";
 import {useDispatch, useSelector} from "react-redux";
 import { useEffect } from "react";
 import DateFormatter from "../../utils/DateFormatter";
 import LoadingComponent from "../../utils/LoadingComponent";
+import { Redirect } from "react-router-dom";
 
 
 
@@ -24,7 +25,11 @@ const PostDetails = ({
 
     //select post details from store
     const post = useSelector(state => state?.post)
-    const {postDetails, loading, appErr, serverErr} = post;
+    const {postDetails, loading, appErr, serverErr, isDeleted} = post;
+
+    //redirect
+  if(isDeleted) return <Redirect to = "/posts" />;
+
 
   return (
     <>
@@ -68,10 +73,12 @@ const PostDetails = ({
                 {postDetails?.description}
                 {/* Show delete and update btn if created user */}
                 <p class="flex">
-                  <Link class="p-3">
+                  <Link to = {`/update-post/${postDetails?._id}`} class="p-3">
                     <PencilAltIcon class="h-8 mt-3 text-yellow-300" />
                   </Link>
-                  <button class="ml-3">
+                  <button
+                  onClick = {() => dispatch(deletePostAction(id))}
+                   class="ml-3">
                     <TrashIcon class="h-8 mt-3 text-red-600" />
                   </button>
                 </p>

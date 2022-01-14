@@ -72,7 +72,7 @@ import LoadingComponent from "../../utils/LoadingComponent";
                      <h2 className="text-red-400 text-base" >{catAppErr} {catServerErr}</h2>
                    ) :
                    categoryList?.length <=0 ? (
-                     <h2 className="text-xl text-gray-100 text-center">Categories Not Found</h2>
+                     <h2 className="text-xl text-gray-100 text-center">No Category Found</h2>
                    ) :(
                      <>
                     {categoryList?.map(category => (

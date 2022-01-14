@@ -180,7 +180,7 @@ extraReducers : (builder) => {
   });
 
 
-  //Update categories
+  //UPDATE CATEGORIES
   builder.addCase(updateCategoriesAction.pending, (state, action) => {
     state.loading = true;
   });
