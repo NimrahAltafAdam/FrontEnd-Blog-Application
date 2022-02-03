@@ -120,10 +120,8 @@ export const toggleAddDisLikesToPost = createAsyncThunk('post/dislike',
       const {data} = await axios.get(`${baseURL}/api/posts/${id}`, config);
       return data
     } catch (error) {
-      if(!error?.response) {
-        throw error;
-      }
-      return rejectWithValue(error?.response?.data);
+      if(!error?.response) throw error;
+        return rejectWithValue(error?.response?.data);
     }
   });
 

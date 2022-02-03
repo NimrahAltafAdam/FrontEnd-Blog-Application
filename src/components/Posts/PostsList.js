@@ -12,12 +12,12 @@ import LoadingComponent from "../../utils/LoadingComponent";
  export default function PostsList() {
 
   //select post from store
-  const post = useSelector(state => state.post)
+  const post = useSelector(state => state?.post);
   const {postList, loading, appErr, serverErr, likes, dislikes} = post;
   console.log(postList?.dislikes?.length);
 
   //select category from store
-  const category = useSelector(state => state.category);
+  const category = useSelector(state => state?.category);
   const {categoryList, 
    loading: catLoading, 
    appErr: catAppErr, 
@@ -29,7 +29,7 @@ import LoadingComponent from "../../utils/LoadingComponent";
    const dispatch = useDispatch();
    //fetch post
    useEffect(() => {
-     dispatch(fetchPostsAction());
+     dispatch(fetchPostsAction(""));
    }, [dispatch, likes, dislikes]);
 
    //fetch category
@@ -53,7 +53,7 @@ import LoadingComponent from "../../utils/LoadingComponent";
                </div>
                <div class=" block text-right w-1/2">
                  {/* View All */}
-                 <button onClick = {() => dispatch(fetchPostsAction())} class="inline-block py-2 px-6 rounded-l-xl rounded-t-xl bg-green-600 hover:bg-green-700 text-gray-50 font-bold leading-loose transition duration-200">
+                 <button onClick = {() => dispatch(fetchPostsAction(""))} class="inline-block py-2 px-6 rounded-l-xl rounded-t-xl bg-green-600 hover:bg-green-700 text-gray-50 font-bold leading-loose transition duration-200">
                    View All Posts
                  </button>
                </div>
