@@ -1,13 +1,14 @@
 import React from "react";
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { PencilAltIcon, TrashIcon } from "@heroicons/react/solid";
 import { deletePostAction, fetchPostDetailsAction } from "../../redux/slices/posts/postSlice";
 import {useDispatch, useSelector} from "react-redux";
-import { useEffect } from "react";
 import DateFormatter from "../../utils/DateFormatter";
 import LoadingComponent from "../../utils/LoadingComponent";
 import { Redirect } from "react-router-dom";
 import AddComment from "../Comments/AddComment";
+import CommentsList from "../Comments/CommentsList";
 
 
 const PostDetails = ({
@@ -15,18 +16,26 @@ const PostDetails = ({
     params: {id},
   },
   })  => {
-    console.log(id);
+    //console.log(id);
     const dispatch = useDispatch();
-  
-    //fect single category -put fetch actions in useEffect 
-    useEffect(() => {
-      dispatch(fetchPostDetailsAction(id));
-    }, [id, dispatch]);
 
     //select post details from store
-    const post = useSelector(state => state?.post)
+    const post = useSelector(state => state?.post);
     const {postDetails, loading, appErr, serverErr, isDeleted} = post;
-    //console.log("ID1 ",postDetails?.user?._id);
+       
+
+    //select commets from store
+    const comment = useSelector(state => state.comment);
+    const {commentCreated, commentDeleted} = comment;
+  
+    //fetch single category -put fetch actions in useEffect 
+    useEffect(() => {
+      dispatch(fetchPostDetailsAction(id));
+    }, [id, dispatch, commentCreated, commentDeleted]);
+
+    
+
+ 
 
     //Get login user
     const user = useSelector(state => state.users);
@@ -45,10 +54,10 @@ const PostDetails = ({
 
   return (
     <>
-      {loading ? <div className="h-screen">
+      {loading ? (<div className="h-screen">
         <LoadingComponent />
-      </div>  : appErr || serverErr ? <h1 className="h-screen text-red-400 text-xl">{serverErr} {appErr}</h1> : 
-      <section class="py-20 2xl:py-40 bg-gray-800 overflow-hidden">
+      </div> )  : appErr || serverErr ? (<h1 className="h-screen text-red-400 text-xl">{serverErr} {appErr}</h1> ) : 
+      (<section class="py-20 2xl:py-40 bg-gray-800 overflow-hidden">
         <div class="container px-4 mx-auto">
           {/* Post Image */}
           <img
@@ -105,9 +114,9 @@ const PostDetails = ({
 
         <div className="flex justify-center  items-center">
           {/* <CommentsList comments={post?.comments} postId={post?._id} /> */}
-          CommentsList
+          <CommentsList comments = {postDetails?.comments} />
         </div>
-      </section>}
+      </section>)}
     </>
   );
 };

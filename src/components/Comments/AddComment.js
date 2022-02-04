@@ -1,20 +1,22 @@
+import React from "react";
 import { useFormik } from "formik";
+import * as Yup from "yup";
 import {useSelector, useDispatch} from "react-redux";
 import { createCommentAction } from "../../redux/slices/comments/commentSlice";
-import * as Yup from "yup";
+
 
 //form Schema
 const formSchema = Yup.object({
   description: Yup.string().required('Description is required'),
-})
+});
 
 
-export default function AddComment({postId}) {
+const AddComment = ({ postId }) => {
   //console.log(props);
   const dispatch = useDispatch();
   const formik = useFormik({
     initialValues: {
-      description: ''
+      description: "",
     },
     onSubmit : values => {
       const data = {
@@ -28,9 +30,9 @@ export default function AddComment({postId}) {
     validationSchema: formSchema,
   });
 
-  //get data from user
-  const store = useSelector(state => state?.comment)
-  const {comment, loading, serverErr, appErr, isCreated} = store;
+  //get data from user-NOT NEEDED
+  //const store = useSelector(state => state?.comment)
+  //const {commentCreated, loading, serverErr, appErr, isCreated} = store;
   return (
     <div className="flex flex-col justify-center items-center">
       {/* Form start here */}
@@ -41,7 +43,7 @@ export default function AddComment({postId}) {
         <input
         onBlur={formik.handleBlur("description")}
         value={formik.values.description}
-        onChange={formik.handleChange ("description")}
+        onChange={formik.handleChange("description")}
           type="text"
           name="text"
           id="text"
@@ -63,3 +65,4 @@ export default function AddComment({postId}) {
     </div>
   );
 }
+export default AddComment;

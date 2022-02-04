@@ -100,7 +100,7 @@ import LoadingComponent from "../../utils/LoadingComponent";
     <div
     key = {post.id }
      class="flex flex-wrap bg-gray-900 -mx-3  lg:mb-6">
-       <div class="mb-10  w-full lg:w-1/4 px-3">
+       <div class="mb-10  w-full lg:w-1/4">
         <Link>
            {/* Post image */}
            <img
