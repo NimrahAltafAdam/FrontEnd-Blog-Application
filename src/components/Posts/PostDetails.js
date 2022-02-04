@@ -7,7 +7,7 @@ import { useEffect } from "react";
 import DateFormatter from "../../utils/DateFormatter";
 import LoadingComponent from "../../utils/LoadingComponent";
 import { Redirect } from "react-router-dom";
-import AddComment from "../Comments/AddComment";
+
 
 
 const PostDetails = ({
@@ -101,7 +101,6 @@ const PostDetails = ({
           </div>
         </div>
         {/* Add comment Form component here */}
-        <AddComment postId={id} />
 
         <div className="flex justify-center  items-center">
           {/* <CommentsList comments={post?.comments} postId={post?._id} /> */}
