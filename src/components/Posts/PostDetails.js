@@ -48,10 +48,9 @@ const PostDetails = ({
     const isCreatedBy = postDetails?.user?._id === _id;  */
 
     const {userAuth} = user;
-    //console.log("ID2",_id);
-
     const isCreatedBy = postDetails?.user?._id === userAuth?._id;  
     console.log(isCreatedBy);
+
 
     //redirect
   if(isDeleted) return <Redirect to = "/posts" />;
@@ -115,7 +114,8 @@ const PostDetails = ({
           </div>
         </div>
         {/* Add comment Form component here */}
-        <AddComment postId={id} />
+        {userAuth ? <AddComment postId={id} /> : null}
+        
 
         <div className="flex justify-center  items-center">
           {/* <CommentsList comments={post?.comments} postId={post?._id} /> */}
