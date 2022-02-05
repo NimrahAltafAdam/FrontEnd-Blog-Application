@@ -12,6 +12,7 @@ import CreatePost from "./components/Posts/CreatePost";
 import PostsList from "./components/Posts/PostsList";
 import PostDetails from "./components/Posts/PostDetails";
 import UpdatePost from "./components/Posts/UpdatePost";
+import UpdateComment from "./components/Comments/UpdateComment";
 
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
      <Navbar />
       <Switch>
       <AdminRoute exact path="/update-category/:id" component={UpdateCategory} />
+      <PrivateProtectedRoute exact path="/update-comment/:id" component={UpdateComment} />
       <PrivateProtectedRoute exact path="/update-post/:id" component={UpdatePost} />
       <PrivateProtectedRoute exact path="/create-post" component={CreatePost} />
       

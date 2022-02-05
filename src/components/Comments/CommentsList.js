@@ -1,12 +1,22 @@
 import { Link } from "react-router-dom";
 import { PencilAltIcon, TrashIcon } from "@heroicons/react/solid";
 import Moment from "react-moment";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { comment } from "postcss";
 import { deleteCommentAction } from "../../redux/slices/comments/commentSlice";
 
+
 export default function CommentsList({comments}) {
   const dispatch = useDispatch();
+  
+  //Get login user
+  const user = useSelector(state => state.users);
+    
+  const {userAuth} = user;
+  const isLoginuser = userAuth?._id;
+  console.log(isLoginuser);
+  //console.log("ID2",_id);
+
   return (
     <div>
       <ul className="divide-y bg-gray-700 w-96 divide-gray-200 p-3 mt-5">
@@ -36,8 +46,10 @@ export default function CommentsList({comments}) {
                 <p className="text-sm text-gray-400">{comment?.description}</p>
                 {/* Check if is the same user created this comment */}
 
-                <p class="flex">
-                  <Link class="p-3">
+                {isLoginuser === comment?.user?._id ? (
+
+                  <p class="flex">
+                  <Link to={`/update-comment/${comment?._id}`} class="p-3">
                     {/* Edit Icon */}
                     <PencilAltIcon class="h-5 mt-3 text-yellow-300" />
                   </Link>
@@ -48,6 +60,7 @@ export default function CommentsList({comments}) {
                     <TrashIcon class="h-5 mt-3 text-red-600" />
                   </button>
                 </p>
+                ) : null}
               </div>
             </div>
           </li>

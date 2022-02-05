@@ -83,6 +83,7 @@ const usersSlices = createSlice({
       state.serverErr = undefined;
     });
     builder.addCase(registerUserAction.fulfilled, (state, action) => {
+      state.loading = false;
       state.registered = action?.payload;
       state.appErr = undefined;
       state.serverErr = undefined;
@@ -113,7 +114,7 @@ const usersSlices = createSlice({
     })
     //logout
     builder.addCase(logoutUserAction.pending, (state, action) => {
-      state.loading = true;
+      state.loading = false;
     });
     builder.addCase(logoutUserAction.fulfilled, (state, action) => {
       state.userAuth = undefined;
@@ -133,5 +134,3 @@ const usersSlices = createSlice({
 
 
 export default usersSlices.reducer;
-
-

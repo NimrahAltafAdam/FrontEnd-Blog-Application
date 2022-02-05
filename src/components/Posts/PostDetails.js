@@ -38,14 +38,19 @@ const PostDetails = ({
  
 
     //Get login user
-    const user = useSelector(state => state.users);
-    
-    const {
-      userAuth: { _id },
-    } = user;
+  const user = useSelector(state => state.users);
+  //The code below was giving an error on logout as we were directly destructuring the id and on logout as userAuth is removed from store it was not returning any id therefore the error was displayed
+  //so in order to tackle this issue the id was destructured manually with a conditional operator that if the userAuth exists then destructure it to retrieve the id. 
+  /*const {
+    userAuth: { _id },
+  } = user;
+    //console.log("ID2",_id);
+    const isCreatedBy = postDetails?.user?._id === _id;  */
+
+    const {userAuth} = user;
     //console.log("ID2",_id);
 
-    const isCreatedBy = postDetails?.user?._id === _id;  
+    const isCreatedBy = postDetails?.user?._id === userAuth?._id;  
     console.log(isCreatedBy);
 
     //redirect
