@@ -29,7 +29,7 @@ function classNames(...classes) {
 const AdminNavbar = ({isLogin}) => {
   //Navigation
   const userNavigation = [
-    { name: "Your Profile", href: `/profile` },
+    { name: "Your Profile", href: `/profile/${isLogin?._id}` },
     { name: "Change your password", href: "/update-password" },
   ];
 

@@ -49,6 +49,36 @@ export const loginUserAction = createAsyncThunk(
   } // then a function with parameters that will take the payload from frontend
 );
 
+
+// Profile
+export const userProfileAction = createAsyncThunk(
+  "user/profile",
+  async (id, { rejectWithValue, getState, dispatch }) => {
+    //get user token
+    const user = getState()?.users;
+    const { userAuth } = user;
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userAuth?.token}`,
+      },
+    };
+    //http call
+    try {
+      const { data } = await axios.get(
+        `${baseURL}/api/users/profile/${id}`,
+        config
+      );
+      return data;
+    } catch (error) {
+      if (!error?.response) {
+        throw error;
+      }
+      return rejectWithValue(error?.response?.data);
+    }
+  }
+);
+
+
 //Logout
 export const logoutUserAction = createAsyncThunk(
   'user\logout', //We will pass action type as a parameter
@@ -68,6 +98,8 @@ export const logoutUserAction = createAsyncThunk(
 
 //get user from the local storage and place into store
 const userLoginFromStorage = localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : null;
+
+
 
 //slices
 // we have to handle all our reducers inside slices
@@ -123,6 +155,24 @@ const usersSlices = createSlice({
       state.serverErr = undefined;
     });
     builder.addCase(logoutUserAction.rejected, (state, action) => {
+      state.loading = false;
+      state.appErr = action?.payload?.message;
+      state.serverErr = action?.error?.message;
+    })
+
+    //Profile
+    builder.addCase(userProfileAction.pending, (state, action) => {
+      state.loading = true;
+      state.appErr = undefined;
+      state.serverErr = undefined;
+    });
+    builder.addCase(userProfileAction.fulfilled, (state, action) => {
+      state.profile = action?.payload;
+      state.loading = false
+      state.appErr = undefined;
+      state.serverErr = undefined;
+    });
+    builder.addCase(userProfileAction.rejected, (state, action) => {
       state.loading = false;
       state.appErr = action?.payload?.message;
       state.serverErr = action?.error?.message;

@@ -13,6 +13,7 @@ import PostsList from "./components/Posts/PostsList";
 import PostDetails from "./components/Posts/PostDetails";
 import UpdatePost from "./components/Posts/UpdatePost";
 import UpdateComment from "./components/Comments/UpdateComment";
+import Profile from "./components/Users/Profile/Profile";
 
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
       <AdminRoute exact path="/update-category/:id" component={UpdateCategory} />
       <PrivateProtectedRoute exact path="/update-comment/:id" component={UpdateComment} />
       <PrivateProtectedRoute exact path="/update-post/:id" component={UpdatePost} />
+      <PrivateProtectedRoute exact path="/profile/:id" component={Profile} />
       <PrivateProtectedRoute exact path="/create-post" component={CreatePost} />
       
       
