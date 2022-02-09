@@ -14,6 +14,7 @@ import PostDetails from "./components/Posts/PostDetails";
 import UpdatePost from "./components/Posts/UpdatePost";
 import UpdateComment from "./components/Comments/UpdateComment";
 import Profile from "./components/Users/Profile/Profile";
+import UploadProfilePhoto from "./components/Users/Profile/UploadProfilePhoto";
 
 
 function App() {
@@ -26,6 +27,9 @@ function App() {
       <PrivateProtectedRoute exact path="/update-post/:id" component={UpdatePost} />
       <PrivateProtectedRoute exact path="/profile/:id" component={Profile} />
       <PrivateProtectedRoute exact path="/create-post" component={CreatePost} />
+      <PrivateProtectedRoute exact path="/create-post" component={CreatePost} />
+      {/*<PrivateProtectedRoute exact path="/upload-profile-photo/:id" component={UploadProfilePhoto} /> */}
+      <PrivateProtectedRoute exact path="/upload-profile-photo" component={UploadProfilePhoto} />
       
       
       <Route exact path="/posts" component={PostsList} />

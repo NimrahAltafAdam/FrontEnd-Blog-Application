@@ -1,7 +1,10 @@
-import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
+import {createAction, createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import axios from "axios";
 import baseURL from "../../../utils/baseURL";
 
+
+
+const resetProfile = createAction('post/reset-post');
 
 //register action
 //first you need to create a payload for this register action. in this case it will be called user
@@ -77,6 +80,37 @@ export const userProfileAction = createAsyncThunk(
     }
   }
 );
+
+
+//Upload Profile Photo
+export const uploadProfilePhotoAction = createAsyncThunk('user/upload', async (profile, {rejectWithValue, getState, dispatch }) => {
+  //get user token
+  const user = getState()?.users;
+  const {userAuth} = user;
+  const config = {
+    headers : {
+      Authorization: `Bearer ${userAuth?.token}`
+    }
+  }
+  //console.log(userAuth?.token);
+  //http call
+  try {
+    //Since we have to add an image with the profile we need to append the string and image data using FormData()
+    const formData = new FormData();
+    formData.append("image", profile?.image);
+
+    console.log(formData, profile )
+    const {data} = await axios.put(`${baseURL}/api/users/profilephoto-upload`, formData, config);
+    //dispatch action
+    dispatch(resetProfile());
+    return data;
+  } catch (error) {
+    if(!error?.response) {
+      throw error;
+    }
+    return rejectWithValue(error?.response?.data);
+  }
+});
 
 
 //Logout
@@ -173,6 +207,27 @@ const usersSlices = createSlice({
       state.serverErr = undefined;
     });
     builder.addCase(userProfileAction.rejected, (state, action) => {
+      state.loading = false;
+      state.appErr = action?.payload?.message;
+      state.serverErr = action?.error?.message;
+    })
+
+    //ProfilePhotoUpload
+    builder.addCase(uploadProfilePhotoAction.pending, (state, action) => {
+      state.loading = true;
+      state.appErr = undefined;
+      state.serverErr = undefined;
+    });
+    builder.addCase(resetProfile, (state,action) => {
+      state.isUploaded = true;
+    })
+    builder.addCase(uploadProfilePhotoAction.fulfilled, (state, action) => {
+      state.photoUploaded = action?.payload;
+      state.loading = false
+      state.appErr = undefined;
+      state.serverErr = undefined;
+    });
+    builder.addCase(uploadProfilePhotoAction.rejected, (state, action) => {
       state.loading = false;
       state.appErr = action?.payload?.message;
       state.serverErr = action?.error?.message;

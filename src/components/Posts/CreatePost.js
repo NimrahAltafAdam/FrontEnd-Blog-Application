@@ -151,7 +151,7 @@ export default function CreatePost() {
                 <Container className = "container bg-gray-600">
                 <Dropzone
                 onBlur = {formik.handleBlur('image')}
-                accept = "/jpeg, image/png"
+                accept = "image/jpeg, image/png"
                 onDrop = {acceptedFiles => {
                   formik.setFieldValue("image", acceptedFiles[0]);
                 }} 
