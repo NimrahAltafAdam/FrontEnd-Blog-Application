@@ -90,7 +90,7 @@ const PostDetails = ({
                 <p class="text-gray-500">
                   <DateFormatter date={postDetails?.createdAt} />
                 </p>
-              </div>
+              </div> 
             </div>
             {/* Post description */}
             <div class="max-w-xl mx-auto">

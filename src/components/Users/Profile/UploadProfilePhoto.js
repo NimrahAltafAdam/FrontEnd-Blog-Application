@@ -30,7 +30,11 @@ outline: none;
 transition: border 0.24s ease-in-out;
 `;
 
-export default function UploadProfilePhoto() {
+export default function UploadProfilePhoto({
+  computedMatch: {
+    params: { id },
+  },
+}) {
 
   const dispatch = useDispatch();
 
@@ -51,7 +55,8 @@ export default function UploadProfilePhoto() {
   const {isUploaded, loading, appErr, serverErr, photoUploaded, userAuth} = data;
 
   //redirect
-  if(photoUploaded) return <Redirect to = {`/profile/${userAuth?._id}`} />
+  //if(photoUploaded) return <Redirect to = {`/profile/${userAuth?._id}`} />
+  if(isUploaded) return <Redirect to={`/profile/${id}`} />;
   return (
     <div className="min-h-screen bg-gray-900 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">

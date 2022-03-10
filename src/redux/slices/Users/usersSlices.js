@@ -4,7 +4,9 @@ import baseURL from "../../../utils/baseURL";
 
 
 
-const resetProfile = createAction('post/reset-post');
+const resetProfile = createAction('user/profilePhoto/reset');
+const resetUserAction = createAction("user/profile/reset"); 
+
 
 //register action
 //first you need to create a payload for this register action. in this case it will be called user
@@ -113,6 +115,51 @@ export const uploadProfilePhotoAction = createAsyncThunk('user/upload', async (p
 });
 
 
+//UpdateUser
+//We will not be updating profile by passing id as params as on the backend the id is retrieved through the login user(check controller)
+export const updateUserAction = createAsyncThunk('user/update', async (userData, {rejectWithValue, getState, dispatch}) => {
+  //get user token
+  const user = getState()?.users;
+  const {userAuth} = user;
+  const config = {
+    headers : {
+      Authorization: `Bearer ${userAuth?.token}`
+    }
+  }
+
+  try {
+    const {data} =  await axios.put(`${baseURL}/api/users`, {
+      firstName: userData?.firstName,
+      lastName: userData?.lastName,
+      email: userData?.email,
+      bio: userData?.bio
+    }, config);
+    //dispatch action
+    dispatch(resetUserAction());
+    return data;
+  } catch (error) {
+    if(!error?.response) {
+      throw error;
+    }
+    return rejectWithValue(error?.response?.data);
+  }
+});
+
+//fetch User details
+export const fetchUserDetailsAction = createAsyncThunk(
+  "user/detail",
+  async (id, { rejectWithValue, getState, dispatch }) => {
+    try {
+      const { data } = await axios.get(`${baseURL}/api/users/${id}`);
+      return data;
+    } catch (error) {
+      if (!error?.response) throw error;
+      return rejectWithValue(error?.response?.data);
+    }
+  }
+);
+
+
 //Logout
 export const logoutUserAction = createAsyncThunk(
   'user\logout', //We will pass action type as a parameter
@@ -156,6 +203,25 @@ const usersSlices = createSlice({
 
     });
     builder.addCase(registerUserAction.rejected, (state, action) => {
+      state.loading = false;
+      state.appErr = action?.payload?.message;
+      state.serverErr = action?.error?.message;
+    });
+
+    //user details
+    builder.addCase(fetchUserDetailsAction.pending, (state, action) => {
+      state.loading = true;
+      state.appErr = undefined;
+      state.serverErr = undefined;
+    });
+    builder.addCase(fetchUserDetailsAction.fulfilled, (state, action) => {
+      state.loading = false;
+      state.userDetails = action?.payload;
+      state.appErr = undefined;
+      state.serverErr = undefined;
+    });
+    builder.addCase(fetchUserDetailsAction.rejected, (state, action) => {
+      console.log(action.payload);
       state.loading = false;
       state.appErr = action?.payload?.message;
       state.serverErr = action?.error?.message;
@@ -223,11 +289,34 @@ const usersSlices = createSlice({
     })
     builder.addCase(uploadProfilePhotoAction.fulfilled, (state, action) => {
       state.photoUploaded = action?.payload;
+      state.isUploaded = false;
       state.loading = false
       state.appErr = undefined;
       state.serverErr = undefined;
     });
     builder.addCase(uploadProfilePhotoAction.rejected, (state, action) => {
+      state.loading = false;
+      state.appErr = action?.payload?.message;
+      state.serverErr = action?.error?.message;
+    })
+
+     //UpdateProfile
+     builder.addCase(updateUserAction.pending, (state, action) => {
+      state.loading = true;
+      state.appErr = undefined;
+      state.serverErr = undefined;
+    });
+    builder.addCase(resetUserAction, (state,action) => {
+      state.isUpdated = true;
+    })
+    builder.addCase(updateUserAction.fulfilled, (state, action) => {
+      state.userUpdated = action?.payload;
+      state.loading = false;
+      state.isUpdated = false;
+      state.appErr = undefined;
+      state.serverErr = undefined;
+    });
+    builder.addCase(updateUserAction.rejected, (state, action) => {
       state.loading = false;
       state.appErr = action?.payload?.message;
       state.serverErr = action?.error?.message;

@@ -11,6 +11,7 @@ import { MailIcon, EyeIcon } from "@heroicons/react/solid";
 import {userProfileAction} from "../../../redux/slices/Users/usersSlices";
 import { useDispatch, useSelector } from "react-redux";
 import DateFormatter from "../../../utils/DateFormatter";
+import LoadingComponent from "../../../utils/LoadingComponent";
 
 export default function Profile({
   computedMatch : {
@@ -23,9 +24,13 @@ export default function Profile({
     dispatch(userProfileAction(id));
   }, [id, dispatch]);
   const users = useSelector(state => state.users);
-  const {profile} = users;
+  const {profile, loading, serverErr, appErr} = users;
   return (
     <>
+     <div className="min-h-screen bg-green-500 flex justify-center items-center">
+
+     {loading ? <LoadingComponent /> : serverErr || appErr ? <h2 className= "text-yellow-400 text-2xl"> {serverErr} {appErr} </h2> 
+      : 
       <div className="h-screen flex overflow-hidden bg-white">
         {/* Static sidebar for desktop */}
 
@@ -91,8 +96,8 @@ export default function Profile({
                           {/* is login user */}
                           {/* Upload profile photo */}
                           <Link
-                            //to={`/upload-profile-photo/${profile?._id}`}
-                            to={`/upload-profile-photo`}
+                            to={`/upload-profile-photo/${profile?._id}`}
+                            //to={`/upload-profile-photo`}
                             className="inline-flex justify-center w-48 px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500"
                           >
                             <UploadIcon
@@ -138,7 +143,7 @@ export default function Profile({
 
                           <>
                             <Link
-                              to="/update-profile"
+                              to={`/update-profile/${profile?._id}`}
                               className="inline-flex justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500"
                             >
                               <UserIcon
@@ -252,6 +257,10 @@ export default function Profile({
           </div>
         </div>
       </div>
+      
+      }
+
+     </div>
     </>
   );
 }

@@ -78,7 +78,7 @@ export default function CreatePost() {
             </p>
           </p>
 
-          {serverErr || appErr ? <h2 className = " text-red-500  ">{serverErr}-{appErr}</h2>: null}
+          {serverErr || appErr ? <h2 className = " text-red-500 text-center  ">{serverErr} {appErr}</h2>: null}
         </div>
         <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
           <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
