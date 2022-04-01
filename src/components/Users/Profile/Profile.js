@@ -8,10 +8,11 @@ import {
 } from "@heroicons/react/outline";
 
 import { MailIcon, EyeIcon } from "@heroicons/react/solid";
-import {userProfileAction} from "../../../redux/slices/Users/usersSlices";
+import {unfollowUserAction, userFollowAction, userProfileAction} from "../../../redux/slices/Users/usersSlices";
 import { useDispatch, useSelector } from "react-redux";
 import DateFormatter from "../../../utils/DateFormatter";
 import LoadingComponent from "../../../utils/LoadingComponent";
+
 
 export default function Profile({
   computedMatch : {
@@ -19,17 +20,20 @@ export default function Profile({
   },
 }) {
 
+  //User data from store
+  const users = useSelector(state => state.users);
+  const {profile, profileLoading, profileServerErr, profileAppErr, followed, unFollowed} = users;
   const dispatch = useDispatch();
+  //fetch user profile
   useEffect(() => {
     dispatch(userProfileAction(id));
-  }, [id, dispatch]);
-  const users = useSelector(state => state.users);
-  const {profile, loading, serverErr, appErr} = users;
+  }, [id, dispatch, followed, unFollowed]);
+  
   return (
     <>
      <div className="min-h-screen bg-green-500 flex justify-center items-center">
 
-     {loading ? <LoadingComponent /> : serverErr || appErr ? <h2 className= "text-yellow-400 text-2xl"> {serverErr} {appErr} </h2> 
+     {profileLoading ? <LoadingComponent /> : profileServerErr || profileAppErr ? <h2 className= "text-yellow-400 text-2xl"> {profileServerErr} {profileAppErr} </h2> 
       : 
       <div className="h-screen flex overflow-hidden bg-white">
         {/* Static sidebar for desktop */}
@@ -112,9 +116,8 @@ export default function Profile({
                           {/* // Hide follow button from the same */}
                           <div>
                             <button
-                              // onClick={() =>
-                              //   dispatch(unFollowUserAction(profile?._id))
-                              // }
+                              onClick={() =>
+                              dispatch(unfollowUserAction(profile?._id))}
                               className="inline-flex justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500"
                             >
                               <EmojiSadIcon
@@ -126,7 +129,7 @@ export default function Profile({
 
                             <>
                               <button
-                                // onClick={followHandler}
+                                onClick= {() => dispatch(userFollowAction(id))}
                                 type="button"
                                 className="inline-flex justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500"
                               >
@@ -135,6 +138,7 @@ export default function Profile({
                                   aria-hidden="true"
                                 />
                                 <span>Follow </span>
+                                <span className="pl-2">{profile?.followers?.length}</span>
                               </button>
                             </>
                           </div>

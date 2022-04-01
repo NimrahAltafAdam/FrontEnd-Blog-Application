@@ -159,6 +159,64 @@ export const fetchUserDetailsAction = createAsyncThunk(
   }
 );
 
+//Follow
+export const userFollowAction = createAsyncThunk(
+  "user/follow",
+  async (userToFollowId, { rejectWithValue, getState, dispatch }) => {
+    //get user token
+    const user = getState()?.users;
+    const { userAuth } = user;
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userAuth?.token}`,
+      },
+    };
+    //http call
+    try {
+      const { data } = await axios.put(
+        `${baseURL}/api/users/follow`,
+        {followId: userToFollowId},
+        config
+      );
+      return data;
+    } catch (error) {
+      if (!error?.response) {
+        throw error;
+      }
+      return rejectWithValue(error?.response?.data);
+    }
+  }
+);
+
+// unFollow
+export const unfollowUserAction = createAsyncThunk(
+  "user/unfollow",
+  async (unFollowId, { rejectWithValue, getState, dispatch }) => {
+    //get user token
+    const user = getState()?.users;
+    const { userAuth } = user;
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userAuth?.token}`,
+      },
+    };
+    //http call
+    try {
+      const { data } = await axios.put(
+        `${baseURL}/api/users/unfollow`,
+        { unFollowId },
+        config
+      );
+      return data;
+    } catch (error) {
+      if (!error?.response) {
+        throw error;
+      }
+      return rejectWithValue(error?.response?.data);
+    }
+  }
+);
+
 
 //Logout
 export const logoutUserAction = createAsyncThunk(
@@ -262,20 +320,20 @@ const usersSlices = createSlice({
 
     //Profile
     builder.addCase(userProfileAction.pending, (state, action) => {
-      state.loading = true;
-      state.appErr = undefined;
-      state.serverErr = undefined;
+      state.profileLoading = true;
+      state.profileAppErr = undefined;
+      state.profileServerErr = undefined;
     });
     builder.addCase(userProfileAction.fulfilled, (state, action) => {
       state.profile = action?.payload;
-      state.loading = false
-      state.appErr = undefined;
-      state.serverErr = undefined;
+      state.profileLoading = false
+      state.profileAppErr = undefined;
+      state.profileServerErr = undefined;
     });
     builder.addCase(userProfileAction.rejected, (state, action) => {
-      state.loading = false;
-      state.appErr = action?.payload?.message;
-      state.serverErr = action?.error?.message;
+      state.profileLoading = false;
+      state.profileAppErr = action?.payload?.message;
+      state.profileServerErr = action?.error?.message;
     })
 
     //ProfilePhotoUpload
@@ -321,6 +379,46 @@ const usersSlices = createSlice({
       state.appErr = action?.payload?.message;
       state.serverErr = action?.error?.message;
     })
+
+    //Follow
+    builder.addCase(userFollowAction.pending, (state, action) => {
+      state.loading = true;
+      state.appErr = undefined;
+      state.serverErr = undefined;
+    });
+    builder.addCase(userFollowAction.fulfilled, (state, action) => {
+      state.followed = action?.payload;
+      state.unFollowed = undefined;
+      state.loading = false
+      state.appErr = undefined;
+      state.serverErr = undefined;
+    });
+    builder.addCase(userFollowAction.rejected, (state, action) => {
+      state.loading = false;
+      state.appErr = action?.payload?.message;
+      state.unFollowed = undefined;
+      state.serverErr = action?.error?.message;
+    })
+
+     //user unFollow
+     builder.addCase(unfollowUserAction.pending, (state, action) => {
+      state.unfollowLoading = true;
+      state.unFollowedAppErr = undefined;
+      state.unfollowServerErr = undefined;
+    });
+    builder.addCase(unfollowUserAction.fulfilled, (state, action) => {
+      state.unfollowLoading = false;
+      state.unFollowed = action?.payload;
+      state.followed = undefined;
+      state.unFollowedAppErr = undefined;
+      state.unfollowServerErr = undefined;
+    });
+    builder.addCase(unfollowUserAction.rejected, (state, action) => {
+      state.unfollowLoading = false;
+      state.unFollowedAppErr = action?.payload?.message;
+      state.followed = undefined;
+      state.unfollowServerErr = action?.error?.message;
+    });
   }
 });
 
