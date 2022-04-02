@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import {
   HeartIcon,
   EmojiSadIcon,
@@ -14,11 +14,11 @@ import DateFormatter from "../../../utils/DateFormatter";
 import LoadingComponent from "../../../utils/LoadingComponent";
 
 
-export default function Profile({
-  computedMatch : {
-    params: {id},
-  },
-}) {
+const Profile = (props) => {
+
+  const id= props?.computedMatch?.params?.id;
+
+  const history = useHistory();
 
   //User data from store
   const users = useSelector(state => state.users);
@@ -28,6 +28,17 @@ export default function Profile({
   useEffect(() => {
     dispatch(userProfileAction(id));
   }, [id, dispatch, followed, unFollowed]);
+
+  //We can use this method to push content from one component tp another
+  const sendMailNavigate = () => {
+    history.push({                 
+      pathname: "/send-mail",
+      state: {
+        email: profile,
+        id: profile?._id
+      },
+    });
+  };
   
   return (
     <>
@@ -158,8 +169,10 @@ export default function Profile({
                             </Link>
                           </>
                           {/* Send Mail */}
-                          <Link
-                            // to={`/send-mail?email=${profile?.email}`}
+                          <button
+                          onClick= {sendMailNavigate}
+                            //to={`/send-mail?email=${profile?.email}`}
+                            to={`/send-mail/${profile?._id}`}
                             className="inline-flex justify-center bg-indigo-900 px-4 py-2 border border-yellow-700 shadow-sm text-sm font-medium rounded-md text-gray-700  hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500"
                           >
                             <MailIcon
@@ -169,7 +182,7 @@ export default function Profile({
                             <span className="text-base mr-2  text-bold text-yellow-500">
                               Send Message
                             </span>
-                          </Link>
+                          </button>
                         </div>
                       </div>
                     </div>
@@ -268,3 +281,5 @@ export default function Profile({
     </>
   );
 }
+
+export default Profile;

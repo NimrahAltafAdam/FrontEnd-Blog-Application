@@ -16,6 +16,7 @@ import UpdateComment from "./components/Comments/UpdateComment";
 import Profile from "./components/Users/Profile/Profile";
 import UploadProfilePhoto from "./components/Users/Profile/UploadProfilePhoto";
 import UpdateProfileForm from "./components/Users/Profile/UpdateProfileForm";
+import SendEmail from "./components/Users/Emailing/SendEmail";
 
 
 
@@ -27,6 +28,7 @@ function App() {
       <AdminRoute exact path="/update-category/:id" component={UpdateCategory} />
       <PrivateProtectedRoute exact path="/update-comment/:id" component={UpdateComment} />
       <PrivateProtectedRoute exact path="/update-post/:id" component={UpdatePost} />
+      <AdminRoute exact path="/send-mail" component={SendEmail} />
       <PrivateProtectedRoute exact path="/profile/:id" component={Profile} />
       <PrivateProtectedRoute exact path="/create-post" component={CreatePost} />
       <PrivateProtectedRoute exact path="/create-post" component={CreatePost} />
