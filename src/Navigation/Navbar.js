@@ -3,6 +3,8 @@ import { useSelector } from 'react-redux';
 import PublicNavbar from './Public/PublicNavbar';
 import PrivateNavbar from './Private/PrivateNavbar'
 import AdminNavbar from './Admin/AdminNavbar';
+import AccountVerificationAlertWarning from './Alerts/AccountVerificationAlertWarning';
+import AccountVerificationSuccessAlert from './Alerts/AccountVerificationSuccessAlert';
 
 
 
@@ -10,13 +12,27 @@ import AdminNavbar from './Admin/AdminNavbar';
 const Navbar = () => {
   //get user from store
   const state = useSelector(state => state?.users);
-  console.log(state)
-  const {userAuth} = state;
+  const {userAuth, profile} = state;
+
+  const account = useSelector(state => state?.accountVerification);
+  const {loading, appErr, serverErr, token } = account;
   const isAdmin = userAuth?.isAdmin;
   console.log(isAdmin);
   return (
     <>
-    {isAdmin ? <AdminNavbar isLogin={userAuth} /> : userAuth ? <PrivateNavbar isLogin={userAuth} /> : <PublicNavbar />}
+    {isAdmin ? 
+    <AdminNavbar isLogin={userAuth} /> : 
+    userAuth ? <PrivateNavbar isLogin={userAuth} /> : 
+    <PublicNavbar />}
+    {userAuth && !userAuth?.isAccountVerified && <AccountVerificationAlertWarning /> }
+    {/* display success msg */}
+    {loading && <h2 className="text-center">Loading please wait...</h2>}
+    {token && <AccountVerificationSuccessAlert />}
+    {appErr || serverErr ? (
+       <h2 className="text-center Otext-red-500">
+         {serverErr} {appErr}
+       </h2>
+    ): null}
       
     </>
   )

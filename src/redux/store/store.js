@@ -3,7 +3,8 @@ import categoriesReducer from '../slices/category/categorySlice';
 import usersReducer from "../slices/Users/usersSlices";
 import postsReducer from "../slices/posts/postSlice";
 import commentsReducer from "../slices/comments/commentSlice"
-import sendMailReducer from "../slices/Email/emailSlice."
+import sendMailReducer from "../slices/Email/emailSlice.";
+import accVerification from "../slices/accountVerification/accVerificationSlices";
 
 const store = configureStore({
   reducer: {
@@ -13,7 +14,8 @@ const store = configureStore({
     //comment
     post: postsReducer,
     comment: commentsReducer,
-    email: sendMailReducer
+    email: sendMailReducer,
+    accountVerification: accVerification,
   } 
 });
 

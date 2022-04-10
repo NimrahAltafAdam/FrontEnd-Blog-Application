@@ -17,6 +17,7 @@ import Profile from "./components/Users/Profile/Profile";
 import UploadProfilePhoto from "./components/Users/Profile/UploadProfilePhoto";
 import UpdateProfileForm from "./components/Users/Profile/UpdateProfileForm";
 import SendEmail from "./components/Users/Emailing/SendEmail";
+import AccountVerified from "./components/Users/AccountVerification/AccountVerified";
 
 
 
@@ -35,6 +36,8 @@ function App() {
       {/*<PrivateProtectedRoute exact path="/upload-profile-photo/:id" component={UploadProfilePhoto} /> */}
       <PrivateProtectedRoute exact path="/upload-profile-photo/:id" component={UploadProfilePhoto} />
       <PrivateProtectedRoute exact path="/update-profile/:id" component={UpdateProfileForm} />
+
+      <PrivateProtectedRoute exact path="/verify-account/:token" component={AccountVerified} />
       
       
       
