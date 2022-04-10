@@ -90,7 +90,7 @@ import LoadingComponent from "../../utils/LoadingComponent";
               </div>
               {
                appErr || serverErr ? (
-                 <h2 className = "text-center text-3xl text-red-600">{appErr}-{serverErr}</h2>
+                 <h2 className = "text-center text-3xl text-yellow-600">{serverErr}-{appErr}</h2>
                ) : 
                postList?.length <=0 ? (
                  <h2 className = "text-center text-3xl text-red-600">No Post Found </h2> 
@@ -165,7 +165,7 @@ import LoadingComponent from "../../utils/LoadingComponent";
            </div>
            <div className="ml-3">
              <p className="text-sm font-medium text-gray-900">
-               <Link className="text-yellow-400 hover:underline ">
+               <Link to = {`/profile/${post?.user?._id}`} className="text-yellow-400 hover:underline ">
                {post?.user?.firstName} {post?.user?.lastName} 
               </Link>
              </p>

@@ -82,11 +82,13 @@ const PostDetails = ({
                 alt=""
               />
               <div class="text-left">
+                <Link to={`/profile/${postDetails?.user?._id}`}>
                 <h4 class="mb-1 text-2xl font-bold text-gray-50">
                   <span class="text-xl lg:text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-br from-yellow-200 to-orange-600">
                   {postDetails?.user?.firstName} {postDetails?.user?.lastName} 
                   </span>
                 </h4>
+                </Link>
                 <p class="text-gray-500">
                   <DateFormatter date={postDetails?.createdAt} />
                 </p>
