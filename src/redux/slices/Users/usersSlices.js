@@ -188,7 +188,7 @@ export const userFollowAction = createAsyncThunk(
   }
 );
 
-// unFollow
+//unFollow
 export const unfollowUserAction = createAsyncThunk(
   "user/unfollow",
   async (unFollowId, { rejectWithValue, getState, dispatch }) => {
@@ -216,6 +216,9 @@ export const unfollowUserAction = createAsyncThunk(
     }
   }
 );
+
+
+
 
 
 //Logout
