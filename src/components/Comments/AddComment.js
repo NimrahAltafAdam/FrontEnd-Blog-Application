@@ -3,6 +3,8 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import {useSelector, useDispatch} from "react-redux";
 import { createCommentAction } from "../../redux/slices/comments/commentSlice";
+import LoadingComponent from "../../utils/LoadingComponent";
+
 
 
 //form Schema
@@ -30,11 +32,18 @@ const AddComment = ({ postId }) => {
     validationSchema: formSchema,
   });
 
-  //get data from user-NOT NEEDED
-  //const store = useSelector(state => state?.comment)
-  //const {commentCreated, loading, serverErr, appErr, isCreated} = store;
+  //get data from store
+  const comment = useSelector(state => state?.comment)
+  const {commentCreated, loading, serverErr, appErr, isCreated} = comment;
   return (
+    <>
     <div className="flex flex-col justify-center items-center">
+    {
+      loading ? 
+      <LoadingComponent /> :
+      appErr || serverErr ?
+      <h2 className = " text-yellow-500 text-center text-lg  ">{serverErr} {appErr} </h2> :
+      <>
       {/* Form start here */}
       <form
       onSubmit={formik.handleSubmit}
@@ -62,7 +71,10 @@ const AddComment = ({ postId }) => {
       <div className="text-red-400 mb-2 mt-2">
         {formik.touched.description && formik.errors.description}
       </div>
+      </>
+    }
     </div>
+    </>
   );
 }
 export default AddComment;

@@ -18,6 +18,10 @@ import UploadProfilePhoto from "./components/Users/Profile/UploadProfilePhoto";
 import UpdateProfileForm from "./components/Users/Profile/UpdateProfileForm";
 import SendEmail from "./components/Users/Emailing/SendEmail";
 import AccountVerified from "./components/Users/AccountVerification/AccountVerified";
+import UsersList from "./components/Users/UsersList/UsersList";
+import UpdatePassword from "./components/Users/Profile/UpdatePassword";
+import ResetPasswordForm from "./components/Users/Profile/ResetPasswordForm";
+import ResetPassword from "./components/Users/Profile/ResetPassword";
 
 
 
@@ -29,7 +33,7 @@ function App() {
       <AdminRoute exact path="/update-category/:id" component={UpdateCategory} />
       <PrivateProtectedRoute exact path="/update-comment/:id" component={UpdateComment} />
       <PrivateProtectedRoute exact path="/update-post/:id" component={UpdatePost} />
-      <AdminRoute exact path="/send-mail" component={SendEmail} />
+      <PrivateProtectedRoute exact path="/send-mail" component={SendEmail} />
       <PrivateProtectedRoute exact path="/profile/:id" component={Profile} />
       <PrivateProtectedRoute exact path="/create-post" component={CreatePost} />
       <PrivateProtectedRoute exact path="/create-post" component={CreatePost} />
@@ -38,12 +42,16 @@ function App() {
       <PrivateProtectedRoute exact path="/update-profile/:id" component={UpdateProfileForm} />
 
       <PrivateProtectedRoute exact path="/verify-account/:token" component={AccountVerified} />
+      <PrivateProtectedRoute exact path="/update-password" component={UpdatePassword} />
+      <Route exact path="/password-reset-token" component={ResetPasswordForm} />
+      <Route exact path="/reset-password/:token" component={ResetPassword} />
       
       
       
       <Route exact path="/posts" component={PostsList} />
       <Route exact path="/posts/:id" component={PostDetails} />
         <AdminRoute exact path="/add-category" component={AddNewCategory} />
+        <AdminRoute exact path="/users" component={UsersList} />
         <AdminRoute exact path="/category-list" component={CategoryList} />
         <Route exact path="/" component={HomePage} />
         <Route exact path="/register" component={Register} />

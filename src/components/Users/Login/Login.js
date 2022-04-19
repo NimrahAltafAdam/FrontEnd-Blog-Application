@@ -1,7 +1,7 @@
 import React from "react";
 import poster from "../../../img/poster.png";
 import {useFormik} from "formik";
-import { Redirect } from "react-router";
+import { Redirect, Link } from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux"
 import * as Yup from "yup";
 import {loginUserAction} from "../../../redux/slices/Users/usersSlices";
@@ -42,11 +42,6 @@ const Login = () => {
     <>
       <section className="min-h-screen relative py-20 2xl:py-40 bg-gray-900 overflow-hidden">
         <div className="absolute top-0 left-0 lg:bottom-0 h-full lg:h-auto w-full lg:w-4/12 bg-violet-500 lg:overflow-hidden">
-          <img
-            className="hidden lg:block h-full w-full object-cover"
-            src={poster}
-            alt=""
-          />
         </div>
         <div className="relative container px-4 mx-auto">
           <div className="max-w-5xl mx-auto">
@@ -149,7 +144,12 @@ const Login = () => {
 
                      }
                   </form>
+                  <div className="p-2">
+                <Link to="/password-reset-token" className="font-medium C text-indigo-600 hover:text-indigo-500">
+                Forget Password ?
+                </Link>
                 </div>
+              </div>
               </div>
               <div className="w-full lg:w-3/5 px-4 mb-16 lg:mb-0 order-first lg:order-last">
                 <span className="flex mb-10 mx-auto items-center justify-center h-20 w-20 bg-blue-500 rounded-lg">

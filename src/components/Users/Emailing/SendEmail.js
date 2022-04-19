@@ -22,26 +22,27 @@ const formSchema = Yup.object({
 const SendEmail = ({location: {
   state 
 }}) => {
+  console.log(state)
   const dispatch = useDispatch();
 
-  const emailDetails = useSelector(state => state?.email)
-  const {mailSent, loading, appErr, serverErr, isSent} = emailDetails;
-
-  const user = useSelector(state => state?.users);
-  const {userAuth} = user;
-
+  //formik
   const formik = useFormik({
-    enableReinitialize: true,
+    //enableReinitialize: true,
     initialValues : {
-      to : state?.email?.email,
+      to : state?.email,
       subject: "",
       message: "",
     },
     onSubmit : values =>  {
+      //dispatch the action
       dispatch(sendEmailAction(values));
     },
     validationSchema: formSchema
   });
+
+  //select data from store
+  const emailDetails = useSelector(state => state?.email)
+  const {mailSent, loading, appErr, serverErr, isSent} = emailDetails;
 
   //redirect
   if (isSent) return <Redirect to={`/profile/${state?.id}`} />;

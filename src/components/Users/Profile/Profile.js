@@ -34,7 +34,7 @@ const Profile = (props) => {
     history.push({                 
       pathname: "/send-mail",
       state: {
-        email: profile,
+        email: profile?.email,
         id: profile?._id
       },
     });
@@ -78,7 +78,7 @@ const Profile = (props) => {
                             {profile?.firstName} {profile?.lastName}
 
                             <span className="inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium bg-yellow-100 text-yellow-800">
-                              {/* {profile?.accountType} */}
+                              {profile?.accountType}
                             </span>
                             {/* Display if verified or not */}
                             {profile?.isAccountVerified ? <span className="inline-flex ml-2 items-center px-3 py-0.5  rounded-lg text-sm font-medium bg-green-600 text-gray-300">
@@ -111,7 +111,8 @@ const Profile = (props) => {
 
                           {/* is login user */}
                           {/* Upload profile photo */}
-                          <Link
+                          {isLoginUser && 
+                            <Link
                             to={`/upload-profile-photo/${profile?._id}`}
                             //to={`/upload-profile-photo`}
                             className="inline-flex justify-center w-48 px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500"
@@ -121,7 +122,7 @@ const Profile = (props) => {
                               aria-hidden="true"
                             />
                             <span>Upload Photo</span>
-                          </Link>
+                          </Link>}
                         </div>
 
                         <div className="mt-6 flex flex-col justify-stretch space-y-3 sm:flex-row sm:space-y-0 sm:space-x-4">
@@ -164,7 +165,8 @@ const Profile = (props) => {
 
                           {/* Update Profile */}
 
-                          <>
+                          {isLoginUser && 
+                            <>
                             <Link
                               to={`/update-profile/${profile?._id}`}
                               className="inline-flex justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500"
@@ -175,7 +177,7 @@ const Profile = (props) => {
                               />
                               <span>Update Profile</span>
                             </Link>
-                          </>
+                          </>}
                           {/* Send Mail */}
                           <button
                           onClick= {sendMailNavigate}
@@ -220,7 +222,7 @@ const Profile = (props) => {
                       <h2 className="text-center text-xl"> No Views</h2>
                       :
                       (profile?.viewedBy.map(user => (
-                        <Link>
+                        <Link to={`/profile/${user?._id}`}>
                         <div className="flex mb-2 items-center space-x-4 lg:space-x-6">
                           <img
                             className="w-16 h-16 rounded-full lg:w-20 lg:h-20"
@@ -244,13 +246,13 @@ const Profile = (props) => {
                   {/* All my Post */}
                   <div className="w-full md:w-2/3 px-4 mb-4 md:mb-0">
                     <h1 className="text-center text-xl border-gray-500 mb-2 border-b-2">
-                      My Posts - {profile?.posts?.length}
+                      My Posts -  {profile?.posts?.length}
                     </h1>
                     {/* Loop here */}
-                   {profile?.posts.length <=0 ? 
+                   {profile?.posts?.length <=0 ? 
                    <h2 className="text-center text-xl"> No Post Found</h2>
                    :
-                   (profile?.posts.map(post => (
+                   (profile?.posts?.map(post => (
                     <div className="flex flex-wrap  -mx-3 mt-3  lg:mb-6">
                       <div className="mb-2   w-full lg:w-1/4 px-3">
                         <Link>
